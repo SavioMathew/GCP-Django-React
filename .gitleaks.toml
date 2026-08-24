@@ -1,0 +1,17 @@
+title = "GCP-Django-React Secret Detection"
+
+[[rules]]
+id = "hardcoded-api-key"
+description = "Detect hardcoded API keys and access tokens"
+regex = '''(?i)(api[_-]?key|secret[_-]?key|access[_-]?key|token)\s*[:=]\s*["']?[A-Za-z0-9_\-]{20,}["']?'''
+secretGroup = 0
+entropy = 3.0
+keywords = [
+  "api_key",
+  "api-key",
+  "secret_key",
+  "secret-key",
+  "access_key",
+  "access-key",
+  "token"
+]

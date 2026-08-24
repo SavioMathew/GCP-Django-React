@@ -16,6 +16,10 @@ permissions:
 
 jobs:
 
+  # =========================================================
+  # 1. TERRAFORM FORMAT GATE
+  # =========================================================
+
   terraform-format:
     name: Terraform Format Gate
     runs-on: ubuntu-latest
@@ -31,6 +35,10 @@ jobs:
         working-directory: terraform
         run: terraform fmt -check -recursive
 
+
+  # =========================================================
+  # 2. TERRAFORM VALIDATION GATE
+  # =========================================================
 
   terraform-validate:
     name: Terraform Validation Gate
@@ -55,6 +63,10 @@ jobs:
         run: terraform validate
 
 
+  # =========================================================
+  # 3. TERRAFORM SECURITY GATE
+  # =========================================================
+
   terraform-security:
     name: Terraform Security Gate
     runs-on: ubuntu-latest
@@ -75,6 +87,10 @@ jobs:
           exit-code: 1
 
 
+  # =========================================================
+  # 4. HARDCODED SECRET GATE
+  # =========================================================
+
   secret-scan:
     name: Hardcoded Secret Gate
     runs-on: ubuntu-latest
@@ -88,11 +104,33 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Gitleaks
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/gitleaks/gitleaks/master/scripts/install.sh | \
+            sh -s -- -b /usr/local/bin
 
+      - name: Run Gitleaks
+        run: |
+          gitleaks detect \
+            --source . \
+            --config .gitleaks.toml \
+            --no-banner \
+            --redact \
+            --exit-code 1
+
+
+  # =========================================================
+  # 5. FINAL DEPLOYMENT GATE
+  #
+  # Deployment can proceed ONLY when:
+  #
+  # Terraform Format       = PASS
+  # Terraform Validation   = PASS
+  # Terraform Security     = PASS
+  # Secret Scan            = PASS
+  #
+  # If ANY required gate fails, this job is skipped.
+  # =========================================================
 
   deployment-gate:
     name: FINAL DEPLOYMENT GATE
@@ -109,4 +147,3 @@ jobs:
           echo " ALL SECURITY GATES PASSED "
           echo " DEPLOYMENT MAY PROCEED "
           echo "=========================================="
-
