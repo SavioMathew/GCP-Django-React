@@ -68,3 +68,20 @@ class StudentOnboardingSerializer(serializers.Serializer):
         if not dcyn.is_valid_consent(value):
             raise serializers.ValidationError("Consent must be explicitly True.")
         return value
+
+
+from .models import StudentOnboarding
+
+
+class StudentOnboardingModelSerializer(StudentOnboardingSerializer, serializers.ModelSerializer):
+    class Meta:
+        model = StudentOnboarding
+        fields = [
+            "student_full_name",
+            "date_of_birth",
+            "guardian_full_name",
+            "guardian_contact_number",
+            "guardian_email",
+            "learning_difficulty_category",
+            "consent_given",
+        ]
