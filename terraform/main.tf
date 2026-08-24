@@ -11,7 +11,8 @@ resource "google_project_service" "required_apis" {
   for_each = toset([
     "storage.googleapis.com",
     "bigquery.googleapis.com",
-    "iam.googleapis.com"
+    "iam.googleapis.com",
+    "compute.googleapis.com"
   ])
 
   project = var.project_id
@@ -62,4 +63,3 @@ resource "google_storage_bucket" "d0_raw_landing" {
     google_project_service.required_apis
   ]
 }
-
