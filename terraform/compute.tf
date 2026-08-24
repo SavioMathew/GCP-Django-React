@@ -55,6 +55,8 @@ resource "google_compute_instance" "application_vm" {
   network_interface {
     network = "default"
 
+    # Public IP is intentional because this VM hosts
+    # the staging application's HTTP/HTTPS endpoint.
     access_config {
       nat_ip = google_compute_address.application_vm_ip.address
     }
@@ -108,6 +110,7 @@ resource "google_compute_firewall" "allow_http" {
 
   allow {
     protocol = "tcp"
+
     ports = [
       "80"
     ]
@@ -136,6 +139,7 @@ resource "google_compute_firewall" "allow_https" {
 
   allow {
     protocol = "tcp"
+
     ports = [
       "443"
     ]
@@ -167,11 +171,13 @@ resource "google_compute_firewall" "allow_ssh_iap" {
 
   allow {
     protocol = "tcp"
+
     ports = [
       "22"
     ]
   }
 
+  # Google Cloud IAP TCP forwarding range
   source_ranges = [
     "35.235.240.0/20"
   ]
@@ -180,4 +186,3 @@ resource "google_compute_firewall" "allow_ssh_iap" {
     "django-react-app"
   ]
 }
-
