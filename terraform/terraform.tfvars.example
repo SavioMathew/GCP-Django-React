@@ -1,0 +1,10 @@
+project_id = "your-gcp-project-id"
+
+region = "asia-south1"
+
+raw_bucket_name = "globally-unique-d0-raw-bucket-name"
+
+bigquery_dataset_id = "d1_staged_enforced"
+
+retention_days = 30
+
