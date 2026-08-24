@@ -1,0 +1,9 @@
+{
+  "student_full_name": "Aarav Sharma",
+  "date_of_birth": "2015-06-12",
+  "guardian_full_name": "Priya Sharma",
+  "guardian_contact_number": "9876543210",
+  "guardian_email": "priya.sharma@example.com",
+  "learning_difficulty_category": "DYSLEXIA",
+  "consent_given": true
+}

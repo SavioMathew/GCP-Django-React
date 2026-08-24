@@ -1,0 +1,62 @@
+{
+  "schema_name": "StudentOnboardingPayload",
+  "version": "1.0",
+  "description": "Incoming student onboarding form, validated via DCYN (Deconstruct-to-Yes/No) rules before entering the Pub/Sub -> BigQuery pipeline.",
+  "fields": [
+    {
+      "field": "student_full_name",
+      "type": "string",
+      "required": true,
+      "max_length": 100,
+      "constraint": "2-100 chars, letters/spaces/hyphens/apostrophes only",
+      "dcyn_function": "is_valid_full_name"
+    },
+    {
+      "field": "date_of_birth",
+      "type": "string",
+      "required": true,
+      "format": "YYYY-MM-DD",
+      "constraint": "must be a real past date; child age 2-18 years",
+      "dcyn_function": "is_valid_date_of_birth"
+    },
+    {
+      "field": "guardian_full_name",
+      "type": "string",
+      "required": true,
+      "max_length": 100,
+      "constraint": "2-100 chars, letters/spaces/hyphens/apostrophes only",
+      "dcyn_function": "is_valid_full_name"
+    },
+    {
+      "field": "guardian_contact_number",
+      "type": "string",
+      "required": true,
+      "max_length": 13,
+      "constraint": "10-digit Indian mobile number, optional +91 prefix",
+      "dcyn_function": "is_valid_guardian_contact_number"
+    },
+    {
+      "field": "guardian_email",
+      "type": "string",
+      "required": true,
+      "max_length": 254,
+      "constraint": "strict email shape, no free text",
+      "dcyn_function": "is_valid_guardian_email"
+    },
+    {
+      "field": "learning_difficulty_category",
+      "type": "string",
+      "required": true,
+      "constraint": "must be one of a fixed closed set",
+      "allowed_values": ["DYSLEXIA", "DYSGRAPHIA", "DYSCALCULIA", "ADHD", "AUTISM_SPECTRUM", "OTHER"],
+      "dcyn_function": "is_valid_learning_difficulty_category"
+    },
+    {
+      "field": "consent_given",
+      "type": "boolean",
+      "required": true,
+      "constraint": "must be explicit boolean True, no implicit truthy values",
+      "dcyn_function": "is_valid_consent"
+    }
+  ]
+}
