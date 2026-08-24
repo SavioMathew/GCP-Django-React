@@ -1,10 +1,10 @@
-variable "demo_leak_key"{
+variable "demo_leak_key" {
   default = "AKIAALBVfdgwfeyweyu12514545"
 }
 
 locals {
   common_labels = {
-environment = "staging"
+    environment = "staging"
     project     = "gcp-django-react"
     managed_by  = "terraform"
     data_zone   = "d0"
